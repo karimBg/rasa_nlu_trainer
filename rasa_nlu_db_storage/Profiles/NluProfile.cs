@@ -13,7 +13,10 @@ namespace rasa_nlu_db_storage.Profiles
     {
         public NluProfile()
         {
-            this.CreateMap<NluModel, Nlu>();
+            this.CreateMap<NluModel, Nlu>().ReverseMap();
+            this.CreateMap<RasaNluDataModel, RasaNLUData>().ReverseMap();
+            this.CreateMap<CommonExampleModel, CommonExample>().ReverseMap();
+            this.CreateMap<EntityModel, Entity>().ReverseMap();
         }
     }
 }
