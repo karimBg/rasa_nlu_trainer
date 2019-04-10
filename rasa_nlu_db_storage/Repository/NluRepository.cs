@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using rasa_nlu_db_storage.Data;
-using rasa_nlu_storage.Models;
+using rasa_nlu_storage.Entities;
 
 namespace rasa_nlu_db_storage.Repository
 {
@@ -41,17 +41,22 @@ namespace rasa_nlu_db_storage.Repository
         public async Task<NluModel> GetRasaModelAsync(int id)
         {
             var query = _context.NluModel.Where(m => m.Id == id);
+            query = query.Include(r => r.RasaNLUData)
+                         .ThenInclude(c => c.CommonExamples)
+                         .ThenInclude(e => e.Entities);
             return await query.FirstOrDefaultAsync();
         }
 
         // RasaNluData
-        public async Task<RasaNLUData> GetRasaNluDataAsync(int nluModelId, int rasaNluId)
+        public async Task<RasaNLUData> GetRasaNluDataByNluModelAsync(int nluModelId, int rasaNluId)
         {
             IQueryable<RasaNLUData> query = _context.RasaNLUDatas;
 
             // Add Query
             query = query
               .Where(t => t.Id == rasaNluId && t.NluModelId == nluModelId);
+            query = query.Include(r => r.CommonExamples)
+                         .ThenInclude(e => e.Entities);
 
             return await query.FirstOrDefaultAsync();
         }
@@ -61,6 +66,7 @@ namespace rasa_nlu_db_storage.Repository
         {
             IQueryable<CommonExample> query = _context.CommonExamples
                 .Where(c => c.RasaNLUData.NluModelId == modelId && c.RasaNLUData.Id == rasaNluId)
+                .Include(r => r.Entities)
                 .Distinct();
 
             return await query.ToArrayAsync();
@@ -74,7 +80,7 @@ namespace rasa_nlu_db_storage.Repository
                     c => c.Id == exampleId && 
                     c.RasaNLUData.NluModelId == modelId && 
                     c.RasaNLUData.Id == rasaNluId
-                );
+                ).Include(e => e.Entities);
 
             return await query.FirstOrDefaultAsync();
         }

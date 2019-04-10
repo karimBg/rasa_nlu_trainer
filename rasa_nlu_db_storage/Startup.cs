@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using rasa_nlu_db_storage.Data;
+using rasa_nlu_db_storage.Repository;
 
 namespace rasa_nlu_db_storage
 {
@@ -29,6 +31,10 @@ namespace rasa_nlu_db_storage
             {
                 options.UseSqlServer(Configuration.GetConnectionString("RasaNluDb"));
             });
+
+            services.AddAutoMapper();
+
+            services.AddScoped<INluRepository, NluRepository>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using rasa_nlu_storage.Models;
+using rasa_nlu_storage.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

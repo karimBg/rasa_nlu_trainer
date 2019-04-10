@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using rasa_nlu_storage.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,13 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace rasa_nlu_storage.Models
+namespace rasa_nlu_db_storage.Models
 {
-    public class CommonExample
+    public class CommonExampleModel
     {
-        public int Id { get; set; }
-        public RasaNLUData RasaNLUData { get; set; }
-
         [Display(Name = "text")]
         [JsonProperty("text")]
         public string Text { get; set; }
@@ -23,6 +21,6 @@ namespace rasa_nlu_storage.Models
 
         [Display(Name = "entities")]
         [JsonProperty("entities")]
-        public ICollection<Entity> Entities { get; set; }
+        public ICollection<EntityModel> Entities { get; set; }
     }
 }

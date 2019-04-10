@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace rasa_nlu_storage.Models
+namespace rasa_nlu_storage.Entities
 {
     public class RasaNLUData
     {

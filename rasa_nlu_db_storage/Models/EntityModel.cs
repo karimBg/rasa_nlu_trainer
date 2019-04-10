@@ -6,13 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace rasa_nlu_storage.Models
+namespace rasa_nlu_db_storage.Models
 {
-    public class Entity
+    public class EntityModel
     {
-        public int Id { get; set; }
-        public CommonExample CommonExample { get; set; }
-
         [Display(Name = "start")]
         [JsonProperty("start")]
         public int Start { get; set; }

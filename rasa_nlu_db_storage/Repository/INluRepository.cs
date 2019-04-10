@@ -1,4 +1,4 @@
-﻿using rasa_nlu_storage.Models;
+﻿using rasa_nlu_storage.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +18,11 @@ namespace rasa_nlu_db_storage.Repository
         Task<NluModel> GetRasaModelAsync(int id);
 
         // RasaNluData
-        Task<RasaNLUData> GetRasaNluDataAsync(int id, int nluDataId);
+        Task<RasaNLUData> GetRasaNluDataByNluModelAsync(int id, int nluDataId);
 
         // CommonExamples
-        Task<CommonExample[]> GetExamplesByRasaNluIdAsync(int modelId, int rasaNluId);
-        Task<CommonExample> GetExampleByRasaNluIdAsync(int modelId, int rasaNluId, int exampleId);
+        Task<CommonExample[]> GetExamplesByRasaNluIdAsync(int rasaNluId, int rasaNluDataId);
+        Task<CommonExample> GetExampleByRasaNluIdAsync(int rasaNluId, int rasaNluDataId, int exampleId);
 
         // Entity
         Task<Entity[]> GetEntitiesByExampleIdAsync(int modelId, int rasaNluId, int exampleId);
