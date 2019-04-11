@@ -120,7 +120,7 @@ namespace rasa_nlu_db_storage.Controllers
             try
             {
                 var commonExample = await _repository.GetExampleByRasaNluIdAsync(rasaNluId, rasaNluDataId, exampleId);
-                if (commonExample == null) return NotFound($"Failed to find the example to Delete with Id: {exampleId}");
+                if (commonExample == null) return NotFound($"Failed to find the example with Id: {exampleId}");
 
                 _repository.Delete(commonExample);
 
@@ -130,7 +130,7 @@ namespace rasa_nlu_db_storage.Controllers
 
                 } else
                 {
-                    return BadRequest($"Failed to Delte the CommonExample with the Id: {exampleId}");
+                    return BadRequest($"Failed to Delte the Common Example with Id: {exampleId}");
                 }
 
             } catch (Exception)
