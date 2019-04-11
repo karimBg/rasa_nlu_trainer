@@ -48,8 +48,7 @@ namespace rasa_nlu_db_storage.Controllers
             try
             {
                 var result = await _repository.GetExampleByRasaNluIdAsync(rasaNluId, rasaNluDataId, exampleId);
-
-                if (result == null) return NotFound();
+                if (result == null) return NotFound($"Could not find example with Id: {exampleId}");
 
                 return _mapper.Map<CommonExampleModel>(result);
 
@@ -107,6 +106,31 @@ namespace rasa_nlu_db_storage.Controllers
                 } else
                 {
                     return BadRequest("Failed To Update the old Common Example");
+                }
+
+            } catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+
+        [HttpDelete("{exampleId:int}")]
+        public async Task<IActionResult> Delete(int rasaNluId, int rasaNluDataId, int exampleId)
+        {
+            try
+            {
+                var commonExample = await _repository.GetExampleByRasaNluIdAsync(rasaNluId, rasaNluDataId, exampleId);
+                if (commonExample == null) return NotFound($"Failed to find the example to Delete with Id: {exampleId}");
+
+                _repository.Delete(commonExample);
+
+                if(await _repository.SaveChangesAsync())
+                {
+                    return Ok();
+
+                } else
+                {
+                    return BadRequest($"Failed to Delte the CommonExample with the Id: {exampleId}");
                 }
 
             } catch (Exception)
