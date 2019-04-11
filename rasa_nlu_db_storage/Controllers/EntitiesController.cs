@@ -91,6 +91,58 @@ namespace rasa_nlu_db_storage.Controllers
             }
         }
 
+        [HttpPut("{entityId:int}")]
+        public async Task<ActionResult<EntityModel>> Put(int rasaNluId, int rasaNluDataId,
+            int exampleId, int entityId, EntityModel model)
+        {
+            try
+            {
+                var oldEntity = await _repository.GetEntityByExampleIdAsync(rasaNluId, rasaNluDataId, exampleId, entityId);
+                if (oldEntity == null) return NotFound($"Could not find Entity with Id: {entityId}, " +
+                    $"inside the CommonExample with the Id: {exampleId}");
 
+                _mapper.Map(model, oldEntity);
+
+                if (await _repository.SaveChangesAsync())
+                {
+                    return _mapper.Map<EntityModel>(oldEntity);
+                } else
+                {
+                    return BadRequest("Failed To Update the old Entity ");
+                }
+
+            } catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
+
+        [HttpDelete("{entityId:int}")]
+        public async Task<ActionResult<EntityModel>> Delete(int rasaNluId, int rasaNluDataId,
+            int exampleId, int entityId, EntityModel model)
+        {
+            try
+            {
+                var entity = await _repository.GetEntityByExampleIdAsync(rasaNluId, rasaNluDataId, exampleId, 
+                    entityId);
+                if (entity == null) return NotFound($"Failed to find the Entity with Id: {entityId}");
+
+                // Delete the Entity
+                _repository.Delete(entity);
+
+                if (await _repository.SaveChangesAsync())
+                {
+                    return Ok();
+
+                } else
+                {
+                    return BadRequest($"Failed to Delte the Entity with Id: {exampleId}");
+                }
+
+            } catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
     }
 }

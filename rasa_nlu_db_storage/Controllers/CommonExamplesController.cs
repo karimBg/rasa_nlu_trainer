@@ -122,9 +122,21 @@ namespace rasa_nlu_db_storage.Controllers
                 var commonExample = await _repository.GetExampleByRasaNluIdAsync(rasaNluId, rasaNluDataId, exampleId);
                 if (commonExample == null) return NotFound($"Failed to find the example with Id: {exampleId}");
 
+                var entities = await _repository.GetEntitiesByExampleIdAsync(rasaNluId, rasaNluDataId, exampleId);
+
+                // Delete the CommonExample
                 _repository.Delete(commonExample);
 
-                if(await _repository.SaveChangesAsync())
+                if(entities != null)
+                {
+                    foreach (var entity in entities)
+                    {
+                        // Delete all the entities that are related to commonExample
+                        _repository.Delete(entity);
+                    }
+                }
+
+                if (await _repository.SaveChangesAsync())
                 {
                     return Ok();
 
