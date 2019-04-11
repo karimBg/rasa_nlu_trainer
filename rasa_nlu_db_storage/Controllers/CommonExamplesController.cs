@@ -89,5 +89,30 @@ namespace rasa_nlu_db_storage.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
             }
         }
+
+        [HttpPut("{exampleId}")]
+        public async Task<ActionResult<CommonExampleModel>> Put(int rasaNluId, 
+            int rasaNluDataId, int exampleId, CommonExampleModel model)
+        {
+            try
+            {
+                var oldExample = await _repository.GetExampleByRasaNluIdAsync(rasaNluId, rasaNluDataId, exampleId);
+                if (oldExample == null) return NotFound($"Could not find example with Id: {exampleId}");
+
+                _mapper.Map(model, oldExample);
+
+                if(await _repository.SaveChangesAsync())
+                {
+                    return _mapper.Map<CommonExampleModel>(oldExample);
+                } else
+                {
+                    return BadRequest("Failed To Update the old Common Example");
+                }
+
+            } catch (Exception)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
+        }
     }
 }
