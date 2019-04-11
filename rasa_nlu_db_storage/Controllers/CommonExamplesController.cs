@@ -64,7 +64,7 @@ namespace rasa_nlu_db_storage.Controllers
             try
             {
                 var rasaNluData = await _repository.GetRasaNluDataByNluModelAsync(rasaNluId, rasaNluDataId);
-                if (rasaNluData == null) return BadRequest("The NLU Data does not Exist");
+                if (rasaNluData == null) return NotFound("The NLU Data does not Exist");
 
                 var commonExample = _mapper.Map<CommonExample>(model);
                 commonExample.RasaNLUData = rasaNluData;
