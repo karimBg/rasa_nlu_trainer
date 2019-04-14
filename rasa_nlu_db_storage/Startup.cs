@@ -27,6 +27,8 @@ namespace rasa_nlu_db_storage
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IExampleRepository, ExampleRepository>();
+
             services.AddDbContextPool<AppDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("RasaNluDb"));

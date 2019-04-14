@@ -13,10 +13,12 @@ namespace rasa_nlu_storage.Entities
         public int Id { get; set; }
         public RasaNLUData RasaNLUData { get; set; }
 
+        [Required]
         [Display(Name = "text")]
         [JsonProperty("text")]
         public string Text { get; set; }
 
+        [Required]
         [Display(Name = "intent")]
         [JsonProperty("intent")]
         public string Intent { get; set; }
